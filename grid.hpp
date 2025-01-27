@@ -126,8 +126,8 @@ namespace sim {
     template<typename DataStorage, typename View>
     bool grid<DataStorage, View>::operator==( const grid& rhs ) const {
 
-        const size_t ydim = get_extent( 0 );
-        const size_t xdim = get_extent( 1 );
+        const size_t ydim = get_dim( 0 );
+        const size_t xdim = get_dim( 1 );
 
         for ( size_t y = 0; y < ydim; ++y )
             for ( size_t x = 0; x < xdim; ++x )
