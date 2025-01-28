@@ -50,6 +50,9 @@ namespace sim {
             template<typename... Indices>
             void set_cell_state_array( const std::array<typename DataStorage::value_type, View::extents_type::static_extent( View::rank() - 1 )>&, Indices... );
 
+            template<typename... Indices>
+            void set_cell_state_array( const std::initializer_list<typename DataStorage::value_type> state, Indices... indices );
+
             typename DataStorage::pointer get_data_handle();
 
             const typename DataStorage::pointer get_data_handle() const;
@@ -193,6 +196,23 @@ namespace sim {
 
         for ( size_t k = 0; k < state.size(); ++k )
             grid_[ indices..., k ] = state[ k ];
+    }
+
+    template<typename DataStorage, typename View>
+    template<typename... Indices>
+    void grid<DataStorage, View>::set_cell_state_array( const std::initializer_list<typename DataStorage::value_type> state, Indices... indices ) {
+
+        static_assert( sizeof...( indices) == View::rank() - 1,
+                       "Number of indices must match all dimension except the last one" );
+
+        constexpr auto expected_len = View::extents_type::static_extent( View::rank() - 1 );
+        
+        if ( state.size() != expected_len ) {
+            throw std::invalid_argument( "Initializer list size does not match the expected size" );
+        }
+
+        for ( size_t i = 0; auto& item: state )
+            grid_[ indices..., i++ ] = item;
     }
 
     template<typename DataStorage, typename View>
