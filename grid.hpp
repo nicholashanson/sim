@@ -208,7 +208,9 @@ namespace sim {
         constexpr auto expected_len = View::extents_type::static_extent( View::rank() - 1 );
         
         if ( state.size() != expected_len ) {
-            throw std::invalid_argument( "Initializer list size does not match the expected size" );
+            throw std::invalid_argument( "Initializer list size does not match the expected size: " 
+                + std::to_string( state.size() ) + " instead of "
+                + std::to_string( expected_len ) );
         }
 
         for ( size_t i = 0; auto& item: state )
