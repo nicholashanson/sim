@@ -26,12 +26,14 @@ if "%1"=="--profile" (
     echo Compiling profiles
     g++ -g -v -std=c++23 -o sim_profile.exe ^
         "C:/Users/HP/Documents/sim/performance_profiling/profile_writing.cpp" ^
+        "C:/Users/HP/Documents/sim/performance_profiling/profile_insert.cpp" ^
         -I"C:/Users/HP/Documents/sim/include" 
 
 ) else if "%1"=="--test" (
     echo Compiling tests...
-    g++ -g -v -std=c++23 -o sim_test.exe -DFS_TEST ^
-        -lgtest -lgtest_main
+    g++ -g -v -std=c++23 -o sim_test.exe ^
+        "C:/Users/HP/Documents/sim/tests/test_row_reverse.cpp" ^
+        -I"C:/Users/HP/Documents/sim/include" 
 ) 
 
 pause

@@ -6,6 +6,7 @@
 #include <cmath>
 #include <array>
 #include <iomanip>
+#include <concepts>
 
 namespace sim {
 
@@ -31,6 +32,8 @@ namespace sim {
 #ifndef NDEBUG
             // equality operator only used for testing
             bool operator==( const grid& ) const;
+
+            void reverse_rows();
 #endif
 
             size_t get_dim( size_t dim ) const {
@@ -154,6 +157,26 @@ namespace sim {
                 }
         return true;
     }
+
+    template<typename DataStorage, typename View>
+    void grid<DataStorage, View>::reverse_rows() {
+
+        const size_t ydim = get_dim( 0 );
+        const size_t xdim = get_dim( 1 );
+        
+        for ( size_t y = 0; y < ydim / 2; ++y ) {
+
+            size_t opposite_y = ydim - 1 - y;
+
+            for ( size_t x = 0; x < xdim; ++ x ) {
+                for ( size_t q = 0; q < 9; ++q ) {
+
+                    std::swap( grid_[ y, x, q ], grid_[ opposite_y, x, q ] );
+                } 
+            }
+        }
+    }
+
 #endif
 
     template<typename DataStorage, typename View>
