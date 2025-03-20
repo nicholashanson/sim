@@ -27,6 +27,8 @@ namespace sim {
 
             grid( grid&& other ) noexcept;
 
+            grid& operator=( const grid& other );
+
             grid& operator=( grid&& other ) noexcept;
 
 #ifndef NDEBUG
@@ -112,6 +114,19 @@ namespace sim {
     template<typename DataStorage, typename View>
     grid<DataStorage, View>::grid( grid&& other ) noexcept
         : cell_states_( std::move( other.cell_states_ ) ), grid_( std::move( other.grid_ ) ) {
+    }
+
+    template<typename DataStorage, typename View>
+    grid<DataStorage, View>& grid<DataStorage, View>::operator=( const grid& other ) {
+        if ( this != &other ) {
+            cell_states_ = other.cell_states_;
+
+            if ( std::holds_alternative<DataStorage>( cell_states_ ) )
+                grid_ = View( std::get<DataStorage>( cell_states_ ).data() );
+            else
+                grid_ = View( std::get<typename DataStorage::pointer>( cell_states_ ) );
+        }
+        return *this;
     }
 
     template<typename DataStorage, typename View>
